@@ -1,16 +1,16 @@
 ---
 title: "Homelab Kubernetes cluster with Talos, Matchbox and Cilium"
-date: "2024-11-16"
+date: "2024-11-17"
 tags: ["kubernetes", "talos", "cilium", "homelab"]
 showTags: true
-draft: true
+draft: false
 ---
 
 ## Intro
 
 Some time ago, I deployed a Kubernetes cluster as a homelab for running some workload and testing some stuff. Back then, I used Unbutu server with straight `kubeadm` to bootstrap the nodes. While it was working, it was not really fun to maintain the OS layer.
 
-Then I came accros [Talos](https://www.talos.dev/) and started using that as the underlying Linux distro on my nodes. My first experience with Talos was the good old : download the boot assets, write them to a USB key and go from there.
+Then I came accros [Talos](https://www.talos.dev/) and started using that as the Linux distro on my nodes. My first experience with Talos was the good old : download the boot assets, write them to a USB key and go from there.
 
 Recently, I decided to improve this setup and make the nodes deploy in an automated fashion via iPXE. This write up covers the steps to get there.
 
@@ -29,6 +29,8 @@ A lot of what is detailed below has been sourced from different places :
 * [Cilium documentation](https://docs.cilium.io/en/stable/)
 
 ## Preparation
+
+Note : I started writing this months ago, I updated some stuff but some of the versions numbers might not match the current releases. Just don't blindly copy paste things ;)
 
 ### Matchbox networking pre-quisite
 
@@ -229,7 +231,7 @@ Make sure to save the client TLS file for later (`client.crt`, `client.key` and 
 
 ### Create Matchbox profiles
 
-I will be using [OpenTofu](https://opentofu.org/) to create the matchbox profiles using the Matchbox provider and the Talos provider to get the correct schematic ID for the boot assets. The complete code is available [in this repo](https://codeberg.org/nerkho/tofu-matchbox-config).
+I will be using [OpenTofu](https://opentofu.org/) to create the matchbox profiles using the Matchbox provider and the Talos provider to get the correct schematic ID for the boot assets. The complete code is available [in this repo](https://github.com/Nerkho/tofu-matchbox-config).
 
 Start by configuring the provider and copy the client TLS file that you saved earlier to a `certs` folder alongside the configuration files.
 
@@ -426,7 +428,7 @@ Just add `l2announcements.enabled=true` as Cilium [L2 announcement feature](http
 ```bash
 helm install \
     cilium cilium/cilium \
-    --version 1.15.5 \
+    --version 1.16.3 \
     --namespace kube-system \
     --set ipam.mode=kubernetes \
     --set=kubeProxyReplacement=true \
