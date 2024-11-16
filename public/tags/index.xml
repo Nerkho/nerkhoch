@@ -1,47 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on nerkho</title>
-    <link>http://localhost:1313/tags/</link>
-    <description>Recent content in Tags on nerkho</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-GB</language>
-    <managingEditor>nerkho@pm.me (nerkho)</managingEditor>
-    <webMaster>nerkho@pm.me (nerkho)</webMaster>
-    <copyright>nerkho (CC BY 4.0)</copyright>
-    <lastBuildDate>Tue, 01 Oct 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Cilium</title>
-      <link>http://localhost:1313/tags/cilium/</link>
-      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author>
-      <guid>http://localhost:1313/tags/cilium/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    <item>
-      <title>Homelab</title>
-      <link>http://localhost:1313/tags/homelab/</link>
-      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author>
-      <guid>http://localhost:1313/tags/homelab/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    <item>
-      <title>Kubernetes</title>
-      <link>http://localhost:1313/tags/kubernetes/</link>
-      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author>
-      <guid>http://localhost:1313/tags/kubernetes/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    <item>
-      <title>Talos</title>
-      <link>http://localhost:1313/tags/talos/</link>
-      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author>
-      <guid>http://localhost:1313/tags/talos/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
+    <title>Tags on </title>
+    <link>//localhost:1313/tags/</link>
+    <description>Recent content in Tags on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <atom:link href="//localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
