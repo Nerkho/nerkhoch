@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nerkho.ch/sitemap.xml

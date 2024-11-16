@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>nerkho</title><link>https://nerkho.ch/</link><description>Recent content on nerkho</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><managingEditor>nerkho@pm.me (nerkho)</managingEditor><webMaster>nerkho@pm.me (nerkho)</webMaster><copyright>nerkho (CC BY 4.0)</copyright><lastBuildDate>Sat, 16 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://nerkho.ch/index.xml" rel="self" type="application/rss+xml"/><item><title>Tools</title><link>https://nerkho.ch/_tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/_tools/</guid><description>Tools I host the few tools below. Feel free to use them.
+redlib : An alternative private frontend for Reddit. PrivateBin : Minimalist, open source and zero knowledge pastebin.</description><content:encoded><![CDATA[<h1 id="tools">Tools</h1>
+<p>I host the few tools below. Feel free to use them.</p>
+<ul>
+<li><a href="https://r.lab.nerkho.ch/">redlib</a> : An alternative private frontend for Reddit.</li>
+<li><a href="https://p.lab.nerkho.ch/">PrivateBin</a> :  Minimalist, open source and zero knowledge pastebin.</li>
+</ul>
+]]></content:encoded></item></channel></rss>
