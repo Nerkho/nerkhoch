@@ -216,7 +216,7 @@ Environment=&#34;MATCHBOX_RPC_ADDRESS=0.0.0.0:8081&#34;</code></pre><p>Eventuall
 </span></span><span class="line"><span class="ln">2</span><span class="cl">sudo cp ca.crt server.crt server.key /etc/matchbox
 </span></span><span class="line"><span class="ln">3</span><span class="cl">sudo chown -R matchbox:matchbox /etc/matchbox</span></span></code></pre></div><p>Make sure to save the client TLS file for later (<code>client.crt</code>, <code>client.key</code> and <code>ca.crt</code>). They will be required to configure Matchbox with OpenTofu.</p>
 <h3 id="create-matchbox-profiles">Create Matchbox profiles</h3>
-<p>I will be using <a href="https://opentofu.org/">OpenTofu</a> to create the matchbox profiles using the Matchbox provider and the Talos provider to get the correct schematic ID for the boot assets. The complete code is available <a href="https://codeberg.org/nerkho/tofu-matchbox-config">in this repo</a>.</p>
+<p>I will be using <a href="https://opentofu.org/">OpenTofu</a> to create the matchbox profiles using the Matchbox provider and the Talos provider to get the correct schematic ID for the boot assets. The complete code is available <a href="https://github.com/Nerkho/tofu-matchbox-config">in this repo</a>.</p>
 <p>Start by configuring the provider and copy the client TLS file that you saved earlier to a <code>certs</code> folder alongside the configuration files.</p>
 
 
