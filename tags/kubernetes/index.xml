@@ -1,37 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Kubernetes on nerkho</title>
-    <link>http://localhost:1313/tags/kubernetes/</link>
-    <description>Recent content in Kubernetes on nerkho</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-GB</language>
-    <managingEditor>nerkho@pm.me (nerkho)</managingEditor>
-    <webMaster>nerkho@pm.me (nerkho)</webMaster>
-    <copyright>nerkho (CC BY 4.0)</copyright>
-    <lastBuildDate>Tue, 01 Oct 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Homelab Kubernetes cluster with Talos, Matchbox and Cilium</title>
-      <link>http://localhost:1313/blog/homelab-k8s-talos-matchbox-cilium/</link>
-      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author>
-      <guid>http://localhost:1313/blog/homelab-k8s-talos-matchbox-cilium/</guid>
-      <description>Intro Some time ago, I deployed a Kubernetes cluster as a homelab for running some workload and testing some stuff. Back then, I used Unbutu server with straight kubeadm to bootstrap the nodes. While it was working, it was not really fun to maintain the OS layer.&#xA;Then I came accros Talos and started using that as the underlying Linux distro on my nodes. My first experience with Talos was the good old : download the boot assets, write them to a USB key and go from there.</description>
-      <content:encoded><![CDATA[<h2 id="intro">Intro</h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Kubernetes on nerkho</title><link>https://nerkho.ch/tags/kubernetes/</link><description>Recent content in Kubernetes on nerkho</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><managingEditor>nerkho@pm.me (nerkho)</managingEditor><webMaster>nerkho@pm.me (nerkho)</webMaster><copyright>nerkho (CC BY 4.0)</copyright><lastBuildDate>Sat, 16 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://nerkho.ch/tags/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>Homelab Kubernetes cluster with Talos, Matchbox and Cilium</title><link>https://nerkho.ch/blog/homelab-k8s-talos-matchbox-cilium/</link><pubDate>Sat, 16 Nov 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/blog/homelab-k8s-talos-matchbox-cilium/</guid><description>Intro Some time ago, I deployed a Kubernetes cluster as a homelab for running some workload and testing some stuff. Back then, I used Unbutu server with straight kubeadm to bootstrap the nodes. While it was working, it was not really fun to maintain the OS layer.
+Then I came accros Talos and started using that as the underlying Linux distro on my nodes. My first experience with Talos was the good old : download the boot assets, write them to a USB key and go from there.</description><content:encoded><![CDATA[<h2 id="intro">Intro</h2>
 <p>Some time ago, I deployed a Kubernetes cluster as a homelab for running some workload and testing some stuff. Back then, I used Unbutu server with straight <code>kubeadm</code> to bootstrap the nodes. While it was working, it was not really fun to maintain the OS layer.</p>
 <p>Then I came accros <a href="https://www.talos.dev/">Talos</a> and started using that as the underlying Linux distro on my nodes. My first experience with Talos was the good old : download the boot assets, write them to a USB key and go from there.</p>
 <p>Recently, I decided to improve this setup and make the nodes deploy in an automated fashion via iPXE. This write up covers the steps to get there.</p>
 <ul>
 <li>
-<p><a href="https://www.talos.dev/">Talos</a>: Talos Linux is a distribution dedicated to running Kubernetes. It can by deployed almost anywhere which makes it an excellent choice for an homelab. By default it contains only what is necessary to run Kubernetes. It doesn&rsquo;t provide a terminal access, everything goes through an API. It&rsquo;s very easy to manage and upgrade.</p>
+<p><a href="https://www.talos.dev/">Talos</a>: Talos Linux is a distribution dedicated to running Kubernetes. It can be deployed almost anywhere, which makes it an excellent choice for a homelab. By default, it contains only what is necessary to run Kubernetes. It doesn&rsquo;t provide a terminal access, everything goes through an API. It&rsquo;s also quite straightforward to manage and upgrade.</p>
 </li>
 <li>
-<p><a href="https://matchbox.psdn.io/">Matchbox</a>: Although you can simply use <code>talosctl</code> to configure Talos nodes, I decided to deploy and bootstrap my nodes via iPXE. Matchbox will help by matching the MAC address with the correct Talos configuration file (control plane vs. worker node).</p>
+<p><a href="https://matchbox.psdn.io/">Matchbox</a>: Although you could simply use a USB stick and <code>talosctl</code> to configure Talos nodes, I decided to deploy and bootstrap my nodes via iPXE. Matchbox will help in that regards by using the correct confugration file (control plane vs. worker node) depending on the MAC address.</p>
 </li>
-</ul>
-<p><img alt="matchbox-arch" src="/img/homelab-k8s-matchbox.png"></p>
-<ul>
-<li><a href="https://cilium.io/">Cilium</a>: Cilium is my cluster CNI. Aside form the networking capabilities, it can also provide <a href="https://docs.cilium.io/en/stable/network/lb-ipam/">LB IPAM</a> capabilities instead of deploying an additional tool like <a href="https://metallb.universe.tf/">MetalLB</a>.</li>
+<li>
+<p><a href="https://cilium.io/">Cilium</a>: Cilium is my cluster CNI. Aside from the networking capabilities, it can also provide <a href="https://docs.cilium.io/en/stable/network/lb-ipam/">LB IPAM</a> capabilities instead of deploying an additional tool like <a href="https://metallb.universe.tf/">MetalLB</a>.</p>
+</li>
 </ul>
 <h3 id="sources">Sources</h3>
 <p>A lot of what is detailed below has been sourced from different places :</p>
@@ -162,10 +143,10 @@ Environment=&#34;MATCHBOX_RPC_ADDRESS=0.0.0.0:8081&#34;</code></pre><p>Eventuall
 </span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">          </span>- <span class="l">bind</span><span class="w">
 </span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">          </span>- <span class="l">rshared</span><span class="w">
 </span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">          </span>- <span class="l">rw</span><span class="w">
-</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w"></span><span class="nn">...</span></span></span></code></pre></div><p>I will also change the default installer, as Longhorn requires some specific <a href="https://www.talos.dev/v1.7/talos-guides/configuration/system-extensions/">system extensions</a> to function. For this, I use <a href="https://factory.talos.dev">Talos Linux Image Factory</a> to generate a schematic ID.</p>
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w"></span><span class="nn">...</span></span></span></code></pre></div><p>I will also change the default installer, as Longhorn requires some specific <a href="https://www.talos.dev/v1.8/talos-guides/configuration/system-extensions/">system extensions</a> to function. For this, I use <a href="https://factory.talos.dev">Talos Linux Image Factory</a> to generate a schematic ID.</p>
 <p><img alt="talos-factory" src="/img/homelab-k8s-talos-factory.png"></p>
 <p>The schematic ID is then used to replace the default installer in both <code>workload.yaml</code> and <code>controlplane.yaml</code> files.</p>
-<p>Note that depending on your hardware configuration, you may also need to change the <code>diskSelector</code>. This will pick any device that is plugged in and has 500GB or more. You can also directly <a href="https://www.talos.dev/v1.7/reference/configuration/v1alpha1/config/#Config.machine.install">specify the device</a>.</p>
+<p>Note that depending on your hardware configuration, you may also need to change the <code>diskSelector</code>. This will pick any device that is plugged in and has 500GB or more. You can also directly <a href="https://www.talos.dev/v1.8/reference/configuration/v1alpha1/config/#Config.machine.install">specify the device</a>.</p>
 
 
 
@@ -175,7 +156,7 @@ Environment=&#34;MATCHBOX_RPC_ADDRESS=0.0.0.0:8081&#34;</code></pre><p>Eventuall
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">  </span><span class="nt">install</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">    </span><span class="nt">diskSelector</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">        </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&gt;= 500GB&#39;</span><span class="w"> </span><span class="c"># Disk size.</span><span class="w">
-</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">factory.talos.dev/installer/613e1592b2da41ae5e265e8789429f22e121aab91cb4deb6bc3c0b6262961245:v1.7.6</span></span></span></code></pre></div><p>Last thing, I&rsquo;m going to disable <code>kube-proxy</code> as I will be replacing it with Cilium. This is only configured in the <code>controlplane.yaml</code> file.</p>
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">factory.talos.dev/installer/613e1592b2da41ae5e265e8789429f22e121aab91cb4deb6bc3c0b6262961245:v1.8.2</span></span></span></code></pre></div><p>Last thing, I&rsquo;m going to disable <code>kube-proxy</code> as I will be replacing it with Cilium. This is only configured in the <code>controlplane.yaml</code> file.</p>
 
 
 
@@ -225,9 +206,9 @@ Environment=&#34;MATCHBOX_RPC_ADDRESS=0.0.0.0:8081&#34;</code></pre><p>Eventuall
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">sudo mkdir -p /etc/matchbox
 </span></span><span class="line"><span class="ln">2</span><span class="cl">sudo cp ca.crt server.crt server.key /etc/matchbox
-</span></span><span class="line"><span class="ln">3</span><span class="cl">sudo chown -R matchbox:matchbox /etc/matchbox</span></span></code></pre></div><p>Make sure to save the client TLS file for later (<code>client.crt</code>, <code>client.key</code> and <code>ca.crt</code>). They will be required for OpenTofu.</p>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">sudo chown -R matchbox:matchbox /etc/matchbox</span></span></code></pre></div><p>Make sure to save the client TLS file for later (<code>client.crt</code>, <code>client.key</code> and <code>ca.crt</code>). They will be required to configure Matchbox with OpenTofu.</p>
 <h3 id="create-matchbox-profiles">Create Matchbox profiles</h3>
-<p>I will be using <a href="https://opentofu.org/">OpenTofu</a> to ceate the matchbox profiles using the Matchbox provider and the Talos provider to get the correct schematic ID for the boot assets. The complete code is available <a href="https://codeberg.org/nerkho/tofu-matchbox-config">in this repo</a>.</p>
+<p>I will be using <a href="https://opentofu.org/">OpenTofu</a> to create the matchbox profiles using the Matchbox provider and the Talos provider to get the correct schematic ID for the boot assets. The complete code is available <a href="https://codeberg.org/nerkho/tofu-matchbox-config">in this repo</a>.</p>
 <p>Start by configuring the provider and copy the client TLS file that you saved earlier to a <code>certs</code> folder alongside the configuration files.</p>
 
 
@@ -242,7 +223,7 @@ Environment=&#34;MATCHBOX_RPC_ADDRESS=0.0.0.0:8081&#34;</code></pre><p>Eventuall
 </span></span><span class="line"><span class="ln"> 6</span><span class="cl">    }
 </span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="n">    talos</span> <span class="o">=</span> {
 </span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="n">      source</span>  <span class="o">=</span> <span class="s2">&#34;siderolabs/talos&#34;</span>
-</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="n">      version</span> <span class="o">=</span> <span class="s2">&#34;0.6.0-alpha.1&#34;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="n">      version</span> <span class="o">=</span> <span class="s2">&#34;0.7.0-alpha.0&#34;</span>
 </span></span><span class="line"><span class="ln">10</span><span class="cl">    }
 </span></span><span class="line"><span class="ln">11</span><span class="cl">  }
 </span></span><span class="line"><span class="ln">12</span><span class="cl">}
@@ -352,16 +333,16 @@ The <code>talos.config</code> parameter should matches with the location of the 
 
 
 
-<pre tabindex="0"><code>talos_version    = &#34;v1.7.6&#34;
-talos_extensions = [&#34;iscsi-tools&#34;, &#34;util-linux-tools&#34;]
-controlplanes = {
-  controlplane-node01 = &#34;00:00:00:00:00:00&#34;
-  controlplane-node02 = &#34;00:00:00:00:00:00&#34;
-  controlplane-node03 = &#34;00:00:00:00:00:00&#34;
-}
-workers = {
-  worker-node01 = &#34;00:00:00:00:00:00&#34;
-}</code></pre><p>You can now apply the configuration.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-terraform" data-lang="terraform"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="na">talos_version</span>    = <span class="s2">&#34;v1.8.2&#34;</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="na">talos_extensions</span> = <span class="p">[</span><span class="s2">&#34;iscsi-tools&#34;</span><span class="p">,</span> <span class="s2">&#34;util-linux-tools&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="na">controlplanes</span> = <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">  <span class="nx">controlplane</span><span class="o">-</span><span class="na">node01</span> = <span class="s2">&#34;00:00:00:00:00:00&#34;</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">  <span class="nx">controlplane</span><span class="o">-</span><span class="na">node02</span> = <span class="s2">&#34;00:00:00:00:00:00&#34;</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">  <span class="nx">controlplane</span><span class="o">-</span><span class="na">node03</span> = <span class="s2">&#34;00:00:00:00:00:00&#34;</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="na">workers</span> = <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">  <span class="nx">worker</span><span class="o">-</span><span class="na">node01</span> = <span class="s2">&#34;00:00:00:00:00:00&#34;</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="p">}</span></span></span></code></pre></div><p>You can now apply the configuration.</p>
 
 
 
@@ -388,7 +369,7 @@ workers = {
 </span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="sb">`</span>-- profiles
 </span></span><span class="line"><span class="ln">13</span><span class="cl">    <span class="p">|</span>-- controlplane.json
 </span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="sb">`</span>-- worker.json</span></span></code></pre></div><h2 id="bootstrap-the-nodes">Bootstrap the nodes</h2>
-<p>This is it ! You can now boot your first nodes. If all goes well, it should look similar to this :</p>
+<p>This is it! You can now boot your first nodes. If all goes well, it should look similar to this :</p>
 <p><img alt="bootstrap" src="/img/homelab-k8s-bootstrap.gif"></p>
 <p>Now you can bootstrap your cluster. You only need to run this command once against one of the controlplane node :</p>
 
@@ -396,8 +377,8 @@ workers = {
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">talosctl bootstrap -n 192.168.1.20</span></span></code></pre></div><p>At this point, the other nodes should automatically joins the cluster if they are already started.
-Once the bootstraping of all nodes is complete, most the stuff at the top should come up green. The kubeconfig should automtically be copied to  <code>~/.kube</code> on our system but it&rsquo;s also possible to retrieve it <code>talosctl kubeconfig -n 192.168.1.20</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">talosctl bootstrap -n 192.168.1.20</span></span></code></pre></div><p>At this point, the other nodes should automatically join the cluster if they are already started.
+Once the bootstrapping of all nodes is complete, most of the stuff at the top should come up green. The kubeconfig should automatically be copied to  <code>~/.kube</code> on our system, but it&rsquo;s also possible to retrieve it <code>talosctl kubeconfig -n 192.168.1.20</code>.</p>
 <p><img alt="talosdashboard" src="/img/homelab-k8s-talos-dashboard-2.png"></p>
 <p>If you disabled <code>kube-proxy</code> earlier, you will notice with <code>kubectl get nodes</code> that the nodes are posting a <code>NotReady</code> state. We still need to deploy Cilium.</p>
 <h2 id="cilium">Cilium</h2>
@@ -479,8 +460,5 @@ Once the bootstraping of all nodes is complete, most the stuff at the top should
 </span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w">  </span><span class="nt">externalIPs</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="w">  </span><span class="nt">loadBalancerIPs</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span></span></span></code></pre></div><p>Now, whenever you create a LoadBalancer service type, it should automatically get an IP address assigned from the defined address pool and the service will be reachable from outside the cluster.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>I see various way this setup could be improved but in general I think it is a nice starting point for K8s homelab cluster with Talos. I hope this was helpful to someone out there :)</p>
-]]></content:encoded>
-    </item>
-  </channel>
-</rss>
+<p>I see various way this setup could be improved, but in general, I think it is a nice starting point for K8s homelab cluster with Talos. I hope this was helpful to someone out there :)</p>
+]]></content:encoded></item></channel></rss>
