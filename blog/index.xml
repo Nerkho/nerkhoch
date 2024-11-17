@@ -400,7 +400,7 @@ Once the bootstrapping of all nodes is complete, most of the stuff at the top sh
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln"> 1</span><span class="cl">helm install <span class="se">\
 </span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="se"></span>    cilium cilium/cilium <span class="se">\
-</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="se"></span>    --version 1.15.5 <span class="se">\
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="se"></span>    --version 1.16.3 <span class="se">\
 </span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="se"></span>    --namespace kube-system <span class="se">\
 </span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="se"></span>    --set ipam.mode<span class="o">=</span>kubernetes <span class="se">\
 </span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="se"></span>    --set<span class="o">=</span><span class="nv">kubeProxyReplacement</span><span class="o">=</span><span class="nb">true</span> <span class="se">\
