@@ -20,7 +20,7 @@ Due to the open and federated nature of the AT Protocol, it's possible to self-h
 Before deploying our PDS, we will need the following :
   * Domain name
   * SMTP Relay service. (e.g. [resend](https://resend.com/) works well.)
-    * Not mandatory to use the PDS, but you'll need it to verify users account.
+    * Not mandatory to use the PDS, but you'll need it to verify user accounts.
   * Kubernetes cluster with :
     * [Ingress NGINX controller](https://github.com/kubernetes/ingress-nginx) (Should™️ also work with a different Ingress Controller)
     * [cert-manager](https://cert-manager.io/) with [HTTP01](https://cert-manager.io/docs/configuration/acme/http01/) and [DNS01](https://cert-manager.io/docs/configuration/acme/dns01/) challenge solvers configured
