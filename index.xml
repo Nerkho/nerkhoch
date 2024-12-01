@@ -1,10 +1,202 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>nerkho</title><link>https://nerkho.ch/</link><description>Recent content on nerkho</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><managingEditor>nerkho@pm.me (nerkho)</managingEditor><webMaster>nerkho@pm.me (nerkho)</webMaster><copyright>nerkho (CC BY 4.0)</copyright><lastBuildDate>Sun, 17 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://nerkho.ch/index.xml" rel="self" type="application/rss+xml"/><item><title>Tools</title><link>https://nerkho.ch/_tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/_tools/</guid><description>Tools I host the few tools below. Feel free to use them.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>nerkho</title><link>https://nerkho.ch/</link><description>Recent content on nerkho</description><generator>Hugo -- gohugo.io</generator><language>en-GB</language><managingEditor>nerkho@pm.me (nerkho)</managingEditor><webMaster>nerkho@pm.me (nerkho)</webMaster><copyright>nerkho (CC BY 4.0)</copyright><lastBuildDate>Sun, 24 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://nerkho.ch/index.xml" rel="self" type="application/rss+xml"/><item><title>Tools</title><link>https://nerkho.ch/_tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/_tools/</guid><description>Tools I host the few tools below. Feel free to use them.
 redlib : An alternative private frontend for Reddit. PrivateBin : Minimalist, open source and zero knowledge pastebin.</description><content:encoded><![CDATA[<h1 id="tools">Tools</h1>
 <p>I host the few tools below. Feel free to use them.</p>
 <ul>
 <li><a href="https://r.lab.nerkho.ch/">redlib</a> : An alternative private frontend for Reddit.</li>
 <li><a href="https://p.lab.nerkho.ch/">PrivateBin</a> :  Minimalist, open source and zero knowledge pastebin.</li>
 </ul>
+]]></content:encoded></item><item><title>Self-hosted Bluesky PDS on Kubernetes</title><link>https://nerkho.ch/blog/self-hosted-pds-on-k8s/</link><pubDate>Sun, 24 Nov 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/blog/self-hosted-pds-on-k8s/</guid><description>Intro A few months ago, I created a simple Helm chart to deploy a Bluesky PDS on Kubernetes. I wanted to extend that a bit and show how it can be deployed.
+What&amp;rsquo;s a PDS? A PDS or Personal Data Server is a component of the AT Protocol network. It&amp;rsquo;s where your user data resides on the AT Protocol. Due to the open and federated nature of the AT Protocol, it&amp;rsquo;s possible to self-host a PDS on your own server and use Bluesky with it.</description><content:encoded><![CDATA[<h2 id="intro">Intro</h2>
+<p>A few months ago, I created a simple Helm chart to deploy a Bluesky PDS on Kubernetes. I wanted to extend that a bit and show how it can be deployed.</p>
+<h2 id="whats-a-pds">What&rsquo;s a PDS?</h2>
+<p>A PDS or Personal Data Server is a component of the AT Protocol network. It&rsquo;s where your user data resides on the AT Protocol.
+Due to the open and federated nature of the AT Protocol, it&rsquo;s possible to self-host a PDS on your own server and use Bluesky with it.</p>
+<h2 id="requirements">Requirements</h2>
+<p>Before deploying our PDS, we will need the following :</p>
+<ul>
+<li>Domain name</li>
+<li>SMTP Relay service. (e.g. <a href="https://resend.com/">resend</a> works well.)
+<ul>
+<li>Not mandatory to use the PDS, but you&rsquo;ll need it to verify user accounts.</li>
+</ul>
+</li>
+<li>Kubernetes cluster with :
+<ul>
+<li><a href="https://github.com/kubernetes/ingress-nginx">Ingress NGINX controller</a> (Should™️ also work with a different Ingress Controller)</li>
+<li><a href="https://cert-manager.io/">cert-manager</a> with <a href="https://cert-manager.io/docs/configuration/acme/http01/">HTTP01</a> and <a href="https://cert-manager.io/docs/configuration/acme/dns01/">DNS01</a> challenge solvers configured</li>
+<li>Long-term storage</li>
+</ul>
+</li>
+<li><a href="https://github.com/Nerkho/helm-charts/tree/main/charts/bluesky-pds">Bluesky PDS Helm chart</a></li>
+</ul>
+<p>Note that I purely focus on the PDS deployment. The elements above will not be covered in details. For this experiment, I have deployed Ingress NGINX with a default configuration.
+The DNS01 challenge solver with cert-manager might be tricky depending on your registrar.</p>
+<h2 id="lets-deploy-our-pds">Let&rsquo;s deploy our PDS</h2>
+<p>If you take a look at the <a href="https://github.com/Nerkho/helm-charts/blob/main/charts/bluesky-pds/values.yaml">default values</a>, you will notice there are sensitive values that need to be passed to the chart. As we are good kids, we will pre-create a secret with those values and reference it with the <code>existingSecret</code>.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w"></span><span class="nt">pds</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;pds.lab.nerkho.ch&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">      </span><span class="c"># -- Output of `openssl rand --hex 16`</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">      </span><span class="nt">jwtSecret</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">      </span><span class="c"># -- Output of `openssl ecparam --name secp256k1 --genkey --noout --outform DER | tail --bytes=+8 | head --bytes=32 | xxd --plain --cols 32`</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">      </span><span class="nt">adminPassword</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">      </span><span class="c"># -- Output of `openssl rand --hex 16`</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">      </span><span class="nt">plcRotationKey</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">      </span><span class="c"># -- Example: `smtps://user:password@smtp.example.com:465/`</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w">      </span><span class="nt">emailSmtpUrl</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="w">      </span><span class="c"># -- Set the value for existingSecret to use a pre-created secret</span><span class="w">
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="w">      </span><span class="c">#existingSecret : &#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w"></span><span class="nn">...</span></span></span></code></pre></div><p>We generate each value as indicated (<em>save those somewhere safe</em>) :</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">openssl rand --hex <span class="m">16</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">&lt;jwtSecret&gt;
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl">openssl ecparam --name secp256k1 --genkey --noout --outform DER <span class="p">|</span> tail --bytes<span class="o">=</span>+8 <span class="p">|</span> head --bytes<span class="o">=</span><span class="m">32</span> <span class="p">|</span> xxd --plain --cols <span class="m">32</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">&lt;plcRotationKey&gt;
+</span></span><span class="line"><span class="ln">6</span><span class="cl">
+</span></span><span class="line"><span class="ln">7</span><span class="cl">openssl rand --hex <span class="m">16</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl">&lt;adminPassword&gt;</span></span></code></pre></div><p>And we create the secret :</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kubectl create secret generic --namespace app-bluesky bluesky-secret <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">adminPassword</span><span class="o">=</span>&lt;adminPassword&gt; <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">jwtSecret</span><span class="o">=</span>&lt;jwtSecret&gt; <span class="se">\
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">plcRotationKey</span><span class="o">=</span>&lt;plcRotationKey&gt;
+</span></span><span class="line"><span class="ln">5</span><span class="cl">    --from-literal<span class="o">=</span><span class="nv">emailSmtpUrl</span><span class="o">=</span>smtps://resend:&lt;your api key here&gt;@smtp.resend.com:465/</span></span></code></pre></div><p>Now, we can reference that secrets in our value file.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln">1</span><span class="cl"><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w"></span><span class="nt">pds</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;pds.lab.nerkho.ch&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w">      </span><span class="nt">existingSecret </span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;bluesky-secret&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w"></span><span class="nn">...</span></span></span></code></pre></div><p>Additionally, we need to set the <code>pdsEmailFromAddress</code> value. This is the email address that will be used by the PDS for verification and such.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln">1</span><span class="cl"><span class="nt">pds</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;pds.lab.nerkho.ch&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">      </span><span class="nt">existingSecret</span><span class="p">:</span><span class="w"> </span><span class="l">bluesky-secret</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w">    </span><span class="nt">pdsEmailFromAddress</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;pds@nerkho.ch&#34;</span></span></span></code></pre></div><p>For the storage, we probably want to define our <code>storageClass</code>. I&rsquo;m using <a href="https://longhorn.io/">Longhorn</a>, so I&rsquo;ll set it here.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln">1</span><span class="cl"><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w"></span><span class="nt">pds</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;pds.lab.nerkho.ch&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w">      </span><span class="nt">existingSecret </span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;bluesky-secret&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w">    </span><span class="nt">dataStorage</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="w">        </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;longhorn&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="w"></span><span class="nn">...</span></span></span></code></pre></div><p>We aim to add 2 hosts. One for the PDS and a wildcard for each user. This is required as on the AT Protocol, each user is kind of its own website with its own subdomain.</p>
+<p>We also need to add the wildcard domain to our TLS hosts. As mentioned earlier, this will require a <a href="https://cert-manager.io/docs/configuration/acme/dns01/">DNS01</a> challenge solvers to be configured on cert-manager.</p>
+<p>If this is not possible in your scenario, you could just list each subdomain for each user of your PDS instead of using a wildcard.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="w">    </span><span class="nt">ingress</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w">      </span><span class="nt">className</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;nginx&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">        </span><span class="nt">cert-manager.io/cluster-issuer</span><span class="p">:</span><span class="w"> </span><span class="l">letsencrypt-prod</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">        </span><span class="nt">kubernetes.io/tls-acme</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">      </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">        </span>- <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">pds.lab.nerkho.ch</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">          </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">            </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">              </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l">Prefix</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">        </span>- <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*.pds.lab.nerkho.ch&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w">          </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="w">            </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="w">              </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l">Prefix</span><span class="w">
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w">      </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="w">        </span>- <span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">bluesky-pds-tls</span><span class="w">
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="w">          </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="w">            </span>- <span class="l">pds.lab.nerkho.ch</span><span class="w">
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="w">            </span>- <span class="s2">&#34;*.pds.lab.nerkho.ch&#34;</span></span></span></code></pre></div><p>With this, we can deploy the PDS. I, personally, use Flux CD on my cluster, but straight <code>helm install ...</code> will work fine as well. If everything goes as planned, you should be able to reach your PDS with <code>curl</code> and see something like this :</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">curl https://pds.lab.nerkho.ch/
+</span></span><span class="line"><span class="ln">2</span><span class="cl">This is an AT Protocol Personal Data Server <span class="o">(</span>PDS<span class="o">)</span>: https://github.com/bluesky-social/atproto
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl">Most API routes are under /xrpc/⏎</span></span></code></pre></div><p>We did not cover it, but I also recommend you to configure the <code>podSecurityContext</code> and <code>securityContext</code>. Commenting out the default value should work just fine.</p>
+<h2 id="create-a-user-and-start-using-bluesky">Create a user and start using Bluesky</h2>
+<p>We can now create our first user. The first step is to create an invite code.</p>
+<p>Note: The <a href="https://github.com/bluesky-social/pds/tree/main/pdsadmin">pdsadmin scripts</a> expect that you are on the same machine as your PDS. I chose to run the commands myself. Another option is to use <a href="https://github.com/lhaig/pdsadmin">this pdsadmin go binary</a> from <a href="https://bsky.app/profile/lhaig.haigmail.com">@lhaig.haigmail.com</a></p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">export</span> <span class="nv">PDS_ADMIN_PASSWORD</span><span class="o">=</span>&lt;adminPassword&gt;
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nb">export</span> <span class="nv">PDS_HOSTNAME</span><span class="o">=</span>pds.lab.nerkho.ch
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl">curl --silent --show-error --request POST --header <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="s2">&#34;</span><span class="nv">$@</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="se"></span>    --user <span class="s2">&#34;admin:</span><span class="si">${</span><span class="nv">PDS_ADMIN_PASSWORD</span><span class="si">}</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="se"></span>    --data <span class="s1">&#39;{&#34;useCount&#34;: 1}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="se"></span>    <span class="s2">&#34;https://</span><span class="si">${</span><span class="nv">PDS_HOSTNAME</span><span class="si">}</span><span class="s2">/xrpc/com.atproto.server.createInviteCode&#34;</span> <span class="p">|</span> jq --raw-output <span class="s1">&#39;.code&#39;</span>
+</span></span><span class="line"><span class="ln">8</span><span class="cl">
+</span></span><span class="line"><span class="ln">9</span><span class="cl">&lt;invite-code&gt;</span></span></code></pre></div><p>With the invite code, we can now create the user.
+We need to create an input JSON file with the user data.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="ln">1</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">  <span class="nt">&#34;email&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;username@example.com&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">  <span class="nt">&#34;handle&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;username&gt;.pds.lab.nerkho.ch&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">  <span class="nt">&#34;password&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;user-password&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">  <span class="nt">&#34;inviteCode&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;invite-code&gt;&#34;</span>
+</span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="p">}</span></span></span></code></pre></div><p>With this, we can create the user. If this works fine, you will get JSON output indicating the user has been successfully created.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">curl --silent --show-error --request POST --header <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="se"></span>    -d @input.json <span class="se">\
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="se"></span>    <span class="s2">&#34;https://</span><span class="si">${</span><span class="nv">PDS_HOSTNAME</span><span class="si">}</span><span class="s2">/xrpc/com.atproto.server.createAccount&#34;</span> <span class="p">|</span> jq</span></span></code></pre></div><p>At this point, we can now login on <a href="https://bsky.app">https://bsky.app</a> with our new user. We need to specify the URL of our PDS in the first field and login with the defined above.</p>
+<p><img alt="bluesky-login" src="/img/bluesky-pds-login.png"></p>
+<p>Et voilà! You are now using Bluesky with a self-hosted PDS. If you&rsquo;d prefer to use a different domain than your PDS for your handle, you can do so and <a href="https://blueskyweb.zendesk.com/hc/en-us/articles/19001802873101-How-to-Set-your-Domain-as-your-Handle">set a custom domain as your handle</a>.</p>
+<h3 id="troubleshooting-invalid-handle-warning">Troubleshooting invalid handle warning</h3>
+<p>If your account shows a warning with <code>invalid handle</code> you can debug that with the <a href="https://bsky-debug.app/handle">Bluesky Handle Debug Page</a>.  This should help to find where the issue lies.</p>
+<p><img alt="bluesky-login" src="/img/bluesky-pds-handle-debug.png"></p>
+<p>You don&rsquo;t need both method DNS and HTTP. Just one suffice.</p>
+<p>If it&rsquo;s green there, often times, just updating the handle in the Account settings help.</p>
+<h2 id="to-go-further">To go further</h2>
+<p>Currently, I only use my PDS for experimenting. If you plan to go productive with it, you will probably want to look into monitoring.</p>
+<p>For this, I recommend taking a look at <a href="https://www.youtube.com/watch?v=7-VJvf39xVE">this video</a> from <a href="https://bsky.app/profile/justingarrison.com">@justingarrison.com</a> where he shows how to run a PDS on an RPI and also touches about monitoring.</p>
 ]]></content:encoded></item><item><title>Homelab Kubernetes cluster with Talos, Matchbox and Cilium</title><link>https://nerkho.ch/blog/homelab-k8s-talos-matchbox-cilium/</link><pubDate>Sun, 17 Nov 2024 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/blog/homelab-k8s-talos-matchbox-cilium/</guid><description>Intro Some time ago, I deployed a Kubernetes cluster as a homelab for running some workload and testing some stuff. Back then, I used Unbutu server with straight kubeadm to bootstrap the nodes. While it was working, it was not really fun to maintain the OS layer.
 Then I came accros Talos and started using that as the Linux distro on my nodes. My first experience with Talos was the good old : download the boot assets, write them to a USB key and go from there.</description><content:encoded><![CDATA[<h2 id="intro">Intro</h2>
 <p>Some time ago, I deployed a Kubernetes cluster as a homelab for running some workload and testing some stuff. Back then, I used Unbutu server with straight <code>kubeadm</code> to bootstrap the nodes. While it was working, it was not really fun to maintain the OS layer.</p>
