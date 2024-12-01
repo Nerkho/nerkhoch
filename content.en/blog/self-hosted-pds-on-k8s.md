@@ -1,6 +1,6 @@
 ---
 title: "Self-hosted Bluesky PDS on Kubernetes"
-date: "2024-11-24"
+date: "2024-12-01"
 tags: ["kubernetes", "pds", "bluesky", "atproto", "self-host"]
 showTags: true
 draft: false
