@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>nerkho</title><link>https://nerkho.ch/fr/</link><description>Recent content on nerkho</description><generator>Hugo -- gohugo.io</generator><language>fr-FR</language><managingEditor>nerkho@pm.me (nerkho)</managingEditor><webMaster>nerkho@pm.me (nerkho)</webMaster><copyright>nerkho (CC BY 4.0)</copyright><atom:link href="https://nerkho.ch/fr/index.xml" rel="self" type="application/rss+xml"/><item><title>Outils</title><link>https://nerkho.ch/fr/_tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><author>nerkho@pm.me (nerkho)</author><guid>https://nerkho.ch/fr/_tools/</guid><description>Outils J&amp;rsquo;héberge les quelques outils ci-dessous.
-redlib : Un frontend privé alternatif pour Reddit. PrivateBin : Minimaliste, open source et zero knowledge pastebin.</description><content:encoded><![CDATA[<h1 id="outils">Outils</h1>
+redlib : Un frontend privé alternatif pour Reddit. Malheureusement, Reddit ban IP les instances redlib. PrivateBin : Minimaliste, open source et zero knowledge pastebin.</description><content:encoded><![CDATA[<h1 id="outils">Outils</h1>
 <p>J&rsquo;héberge les quelques outils ci-dessous.</p>
 <ul>
-<li><a href="https://r.lab.nerkho.ch/">redlib</a> : Un frontend privé alternatif pour Reddit.</li>
+<li><del><a href="https://r.lab.nerkho.ch/">redlib</a> : Un frontend privé alternatif pour Reddit.</del> Malheureusement, Reddit ban IP les instances redlib.</li>
 <li><a href="https://p.lab.nerkho.ch/">PrivateBin</a> :  Minimaliste, open source et zero knowledge pastebin.</li>
 </ul>
 ]]></content:encoded></item></channel></rss>
