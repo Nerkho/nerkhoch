@@ -8,5 +8,5 @@ weight: 3
 
 J'héberge les quelques outils ci-dessous.
 
-* [redlib](https://r.lab.nerkho.ch/) : Un frontend privé alternatif pour Reddit.
+* ~~[redlib](https://r.lab.nerkho.ch/) : Un frontend privé alternatif pour Reddit.~~ Malheureusement, Reddit ban IP les instances redlib.
 * [PrivateBin](https://p.lab.nerkho.ch/) :  Minimaliste, open source et zero knowledge pastebin.
